@@ -11,9 +11,9 @@ LD  := $(COMPILER_DIR)/$(COMPILER_PREFIX)ld
 
 
 
-OBJDIR :=$(PROJECT_DIR)/out/log/obj
-LIBDIR := $(PROJECT_DIR)/out/log/lib
-BINDIR := $(PROJECT_DIR)/out/log/bin
+OBJDIR :=$(PROJECT_DIR)/out/libs/liblog/obj
+LIBDIR := $(PROJECT_DIR)/out/libs/liblog/lib
+#BINDIR := $(PROJECT_DIR)/out/libs/log/bin
 SRCDIR := ./
 
 

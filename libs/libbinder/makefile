@@ -15,9 +15,9 @@ TARGET := libbinder.so
 SRCDIR := ./
 
 
-OBJDIR := $(PROJECT_DIR)/out/libs/binder/obj
-LIBDIR := $(PROJECT_DIR)/out/libs/binder/lib
-#BINDIR := $(PROJECT_DIR)/out/libs/binder/bin
+OBJDIR := $(PROJECT_DIR)/out/libs/libbinder/obj
+LIBDIR := $(PROJECT_DIR)/out/libs/libbinder/lib
+#BINDIR := $(PROJECT_DIR)/out/libs/libbinder/bin
 
 
 CFLAGS  :=  -fPIC
