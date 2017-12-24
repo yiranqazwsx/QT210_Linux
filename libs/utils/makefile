@@ -9,15 +9,15 @@ CXX                 := $(COMPILER_DIR)/$(COMPILER_PREFIX)g++
 AR	                := $(COMPILER_DIR)/$(COMPILER_PREFIX)ar
 LD               	:= $(COMPILER_DIR)/$(COMPILER_PREFIX)ld
 
-LIBDIR := $(PROJECT_DIR)/out/lib/binder
-TARGET := libbinder.so
+
+TARGET := libutils.so
 
 SRCDIR := ./
 
 
-OBJDIR := $(PROJECT_DIR)/out/libs/libbinder/obj
-LIBDIR := $(PROJECT_DIR)/out/libs/libbinder/lib
-#BINDIR := $(PROJECT_DIR)/out/libs/libbinder/bin
+OBJDIR := $(PROJECT_DIR)/out/libs/libutils/obj
+LIBDIR := $(PROJECT_DIR)/out/libs/libutils/lib
+#BINDIR := $(PROJECT_DIR)/out/libs/libutils/bin
 
 
 CFLAGS  :=  -fPIC
@@ -25,32 +25,36 @@ CFLAGS  += -DHAVE_PTHREADS
 CFLAGS  += -DHAVE_SYS_UIO_H
 CFLAGS  += -DHAVE_ENDIAN_H
 CFLAGS  += -DHAVE_ANDROID_OS=1
+CFLAGS  += -DHAVE_PRCTL
+CFLAGS  += -DHAVE_SCHED_H
+
 
 LIBS := \
 	-lcutils \
-
+	-lrt \
+	-ldl \
+	-lpthread \
+	
 LIBDIRS := \
 
 INCPATHS := \
 	-I ../include \
 
 SOURCES := \
-    Binder.cpp \
-    BpBinder.cpp \
-    CursorWindow.cpp \
-    IInterface.cpp \
-    IMemory.cpp \
-    IPCThreadState.cpp \
-    IPermissionController.cpp \
-    IServiceManager.cpp \
-    MemoryDealer.cpp \
-    MemoryBase.cpp \
-    MemoryHeapBase.cpp \
-    MemoryHeapPmem.cpp \
-    Parcel.cpp \
-    PermissionCache.cpp \
-    ProcessState.cpp \
-    Static.cpp
+    RefBase.cpp \
+    String8.cpp \
+    String16.cpp \
+    StringArray.cpp \
+    VectorImpl.cpp \
+    Threads.cpp \
+    Unicode.cpp \
+    Static.cpp \
+    BufferedTextOutput.cpp \
+    TextOutput.cpp \
+    Timers.cpp \
+    SharedBuffer.cpp \
+    Debug.cpp \
+    SystemClock.cpp \
 
 
 OBJECTS := $(addprefix $(OBJDIR)/, $(SOURCES:.cpp=.o))

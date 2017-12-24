@@ -21,10 +21,12 @@
 
 #ifdef HAVE_ANDROID_OS
 #include <linux/ioctl.h>
+#include <sys/ioctl.h>
 #include <linux/rtc.h>
 #include <utils/Atomic.h>
 #include <linux/android_alarm.h>
 #endif
+
 
 #include <sys/time.h>
 #include <limits.h>

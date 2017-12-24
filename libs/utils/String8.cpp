@@ -39,7 +39,7 @@ namespace android {
 // Separator used by resource paths. This is not platform dependent contrary
 // to OS_PATH_SEPARATOR.
 #define RES_PATH_SEPARATOR '/'
-
+#define OS_PATH_SEPARATOR '/'
 static SharedBuffer* gEmptyStringBuf = NULL;
 static char* gEmptyString = NULL;
 

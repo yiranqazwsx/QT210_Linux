@@ -45,6 +45,9 @@
 #include <sys/prctl.h>
 #endif
 
+#include <sys/syscall.h>  
+#define gettid() syscall(__NR_gettid) 
+
 /*
  * ===========================================================================
  *      Thread wrappers

@@ -24,6 +24,7 @@
 
 bool socket_peer_is_trusted(int fd)
 {
+#if 0
 #ifdef HAVE_ANDROID_OS
     struct ucred cr;
     socklen_t len = sizeof(cr);
@@ -39,6 +40,8 @@ bool socket_peer_is_trusted(int fd)
         return false;
     }
 #endif
+#endif
+
 
     return true;
 }

@@ -47,7 +47,7 @@ TARGET := liblog.so
 
 $(LIBDIR)/$(TARGET): $(COBJECTS)  $(CppOBJECTS)
 	@-mkdir -p $(LIBDIR) 2> /dev/null
-	$(LD) -shared $^ -o $@      
+	$(CXX) -shared $^ -o $@      
 	#$(AR)  -rcs $@ $^
 
 $(COBJECTS): $(OBJDIR)/%.o: $(SRCDIR)/%.c

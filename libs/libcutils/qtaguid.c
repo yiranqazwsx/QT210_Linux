@@ -44,6 +44,17 @@ static const char *TAG_PACIFIER_PARAM = "/sys/module/xt_qtaguid/parameters/tag_t
 static int resTrackFd = -1;
 pthread_once_t resTrackInitDone = PTHREAD_ONCE_INIT;
 
+#ifndef TEMP_FAILURE_RETRY
+/* Used to retry syscalls that can return EINTR. */
+#define TEMP_FAILURE_RETRY(exp) ({         \
+    typeof (exp) _rc;                      \
+    do {                                   \
+        _rc = (exp);                       \
+    } while (_rc == -1 && errno == EINTR); \
+    _rc; })
+#endif
+
+
 /* Only call once per process. */
 void qtaguid_resTrack(void) {
     resTrackFd = TEMP_FAILURE_RETRY(open("/dev/xt_qtaguid", O_RDONLY));
