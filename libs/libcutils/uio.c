@@ -49,6 +49,7 @@ Exit:
 int  writev( int  fd, const struct iovec*  vecs, int  count )
 {
     int   total = 0;
+    //fprintf(stderr, "writev:fd = %d\r\n",fd);
 
     for ( ; count > 0; count--, vecs++ ) {
         const char*  buf = (const char*)vecs->iov_base;

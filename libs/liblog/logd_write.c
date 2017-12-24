@@ -72,6 +72,8 @@ int __android_log_dev_available(void)
 
 static int __write_to_log_null(log_id_t log_fd, struct iovec *vec, size_t nr)
 {
+
+	//fprintf(stderr, "__write_to_log_null:\r\n");
     return -1;
 }
 
@@ -87,6 +89,7 @@ static int __write_to_log_kernel(log_id_t log_id, struct iovec *vec, size_t nr)
     }
 
     do {
+	//fprintf(stderr, "__write_to_log_kernel:\r\n");
         ret = log_writev(log_fd, vec, nr);
     } while (ret < 0 && errno == EINTR);
 
@@ -106,7 +109,7 @@ static int __write_to_log_init(log_id_t log_id, struct iovec *vec, size_t nr)
         log_fds[LOG_ID_SYSTEM] = log_open("/dev/"LOGGER_LOG_SYSTEM, O_WRONLY);
 
         write_to_log = __write_to_log_kernel;
-
+	//	fprintf(stderr, "__write_to_log_init:\r\n");	
         if (log_fds[LOG_ID_MAIN] < 0 || log_fds[LOG_ID_RADIO] < 0 ||
                 log_fds[LOG_ID_EVENTS] < 0) {
             log_close(log_fds[LOG_ID_MAIN]);
@@ -155,7 +158,7 @@ int __android_log_write(int prio, const char *tag, const char *msg)
     vec[1].iov_len    = strlen(tag) + 1;
     vec[2].iov_base   = (void *) msg;
     vec[2].iov_len    = strlen(msg) + 1;
-
+//	fprintf(stderr, "__android_log_print:msg = \r\n",msg);	
     return write_to_log(log_id, vec, 3);
 }
 
@@ -183,7 +186,8 @@ int __android_log_buf_write(int bufID, int prio, const char *tag, const char *ms
     vec[1].iov_len    = strlen(tag) + 1;
     vec[2].iov_base   = (void *) msg;
     vec[2].iov_len    = strlen(msg) + 1;
-
+	//fprintf(stderr, "__android_log_buf_write: %s" ,msg);	
+		
     return write_to_log(bufID, vec, 3);
 }
 
@@ -204,7 +208,7 @@ int __android_log_print(int prio, const char *tag, const char *fmt, ...)
     va_start(ap, fmt);
     vsnprintf(buf, LOG_BUF_SIZE, fmt, ap);
     va_end(ap);
-
+//	fprintf(stderr, "__android_log_print:\r\n");	
     return __android_log_write(prio, tag, buf);
 }
 
