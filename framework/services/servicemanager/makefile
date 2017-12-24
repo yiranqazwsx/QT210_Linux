@@ -1,5 +1,6 @@
 COMPILER_DIR := /opt/EmbedSky/4.4.6/bin
-PROJECT_DIR         := ../..
+PROJECT_DIR         := ../../..
+
 
 
 COMPILER_PREFIX     := arm-linux-
@@ -8,15 +9,15 @@ CXX                 := $(COMPILER_DIR)/$(COMPILER_PREFIX)g++
 AR	                := $(COMPILER_DIR)/$(COMPILER_PREFIX)ar
 LD               	:= $(COMPILER_DIR)/$(COMPILER_PREFIX)ld
 
-LIBDIR := $(PROJECT_DIR)/out/lib/binder
+
 TARGET := servicemanager
 
 SRCDIR := ./
 
 
-OBJDIR := $(PROJECT_DIR)/out/service/serviceManager/obj
-#LIBDIR := $(PROJECT_DIR)/out/service/serviceManager/lib
-BINDIR := $(PROJECT_DIR)/out/service/serviceManager/bin
+OBJDIR := $(PROJECT_DIR)/out/framework/services/servicemanager/obj
+#LIBDIR := $(PROJECT_DIR)/out/framework/services/servicemanagerr/lib
+BINDIR := $(PROJECT_DIR)/out/framework/services/servicemanager/bin
 
 
 CFLAGS  :=  -fPIC
@@ -29,11 +30,11 @@ LIBS := \
 	-llog \
 
 LIBDIRS := \
-	-L ../../out/libs/liblog/lib \
+	-L ../../../out/libs/liblog/lib \
 	
 INCPATHS := \
 	-I . \
-	-I ../../libs/include/ \
+	-I ../../../libs/include/ \
 
 SOURCES := \
 	service_manager.c \
