@@ -15,9 +15,9 @@ TARGET := ServiceTest
 SRCDIR := ./
 
 
-OBJDIR := $(PROJECT_DIR)/out/sample/binder/serviceAndClient/client/obj
+OBJDIR := $(PROJECT_DIR)/out/sample/binder/serviceAndClient/service/obj
 #LIBDIR := $(PROJECT_DIR)/out/sample/binder/serviceAndClient/client/lib
-BINDIR := $(PROJECT_DIR)/out/sample/binder/serviceAndClient/client/bin
+BINDIR := $(PROJECT_DIR)/out/sample/binder/serviceAndClient/service/bin
 
 
 CFLAGS  :=  -fPIC
