@@ -1,5 +1,6 @@
+#define LOG_TAG "IAlarmCallback"
+#include <cutils/log.h>
 #include <binder/Parcel.h>
-
 #include "IAlarmCallback.h"
 
 using namespace android;
@@ -8,17 +9,17 @@ class BpAlarmCallback : public BpInterface<IAlarmCallback>
 {
 public:
 	BpAlarmCallback(const sp<IBinder> & impl) : BpInterface<IAlarmCallback>(impl)
-    {
-    
-    }
+	{
+
+	}
 	virtual int AlarmNotifyCallback(unsigned int repeatFlag,time_t deadline)
 	{
-        printf("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);  
-        Parcel data,reply;
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
+		Parcel data,reply;
 		data.writeInt32(repeatFlag);
 		data.writeInt64(deadline);
-        remote()->transact(ALARM_NOTIFY_CALLBACK, data, &reply);
-        return reply.readInt32();  
+		remote()->transact(ALARM_NOTIFY_CALLBACK, data, &reply);
+		return reply.readInt32();  
 	}  
 };
 
@@ -30,7 +31,7 @@ status_t BnAlarmCallback::onTransact(uint32_t code, const Parcel& data, Parcel* 
 	{
 		case ALARM_NOTIFY_CALLBACK:
 		{
-			printf("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);  
+			LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 			unsigned int repeatFlag = data.readInt32();
 			time_t deadline = data.readInt64();
 			int res = AlarmNotifyCallback(repeatFlag,deadline);
@@ -38,8 +39,8 @@ status_t BnAlarmCallback::onTransact(uint32_t code, const Parcel& data, Parcel* 
 			return NO_ERROR;
 		}
 		break;
-		
+
 		default:
-	    return BBinder::onTransact(code, data, reply, flags);
+		return BBinder::onTransact(code, data, reply, flags);
 	}
 }

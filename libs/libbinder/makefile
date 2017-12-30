@@ -9,7 +9,7 @@ CXX                 := $(COMPILER_DIR)/$(COMPILER_PREFIX)g++
 AR	                := $(COMPILER_DIR)/$(COMPILER_PREFIX)ar
 LD               	:= $(COMPILER_DIR)/$(COMPILER_PREFIX)ld
 
-LIBDIR := $(PROJECT_DIR)/out/lib/binder
+
 TARGET := libbinder.so
 
 SRCDIR := ./

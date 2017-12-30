@@ -1,4 +1,3 @@
-
 #define LOG_TAG "AlarmManager"
 #include <cutils/log.h>
 
@@ -13,7 +12,7 @@
 using namespace android;
 
 
-AlarmManager* AlarmManager::m_pInstance = NULL;
+AlarmManager* AlarmManager::mpInstance = NULL;
 
 
 #if 0
@@ -42,20 +41,20 @@ size_t UTF16ToUTF8(char *mbBuffer, const char16_t *utf16String)
 
 AlarmManager* AlarmManager::getInstance(unsigned long nodeId)
 {
-	printf("AlarmManager init in.\n");
-	
-    if (NULL == m_pInstance)
-    {
-        m_pInstance = new AlarmManager(nodeId);
-    }
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
+
+	if (NULL == mpInstance)
+	{
+		mpInstance = new AlarmManager(nodeId);
+	}
 	else
-    {
-		printf("AlarmManager init  fail.\n");
+	{
+		LOGE("[%s:%s-%d] AlarmManager init  fail.\n", __FILE__, __func__, __LINE__);
 	}
 
-	printf("AlarmManager init  out.\n");
-	
-    return m_pInstance;
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
+
+	return mpInstance;
 }
 
 
@@ -65,56 +64,52 @@ AlarmManager::AlarmManager(unsigned long  nodeId)
 	
 	sp<IServiceManager> sm = defaultServiceManager();
 	sp<IBinder> binder;
-	do{
-		binder = sm->getService(String16("alarmservice"));
-		if(binder != 0)
-		{
-			break;
-		}
-		printf("Binder handle not published alarmservice, waiting...!!!\n");
-		usleep(100000);
-	}while(true);
 
-	mIAlarmService = interface_cast<IAlarmService>(binder);
+	binder = sm->getService(String16("alarmservice"));
+	if(binder != 0)
+	{	
+		mIAlarmService = interface_cast<IAlarmService>(binder);
 
-	const char16_t* name16 = mIAlarmService->getInterfaceDescriptor().string();
-	//UTF16ToUTF8(name8Buffer,name16);
-	//name8Buffer[63] = 0;
+		const char16_t* name16 = mIAlarmService->getInterfaceDescriptor().string();
+		//UTF16ToUTF8(name8Buffer,name16);
+		//name8Buffer[63] = 0;
+		mNodeId = nodeId;
+		LOGD("[%s:%s-%d] AlarmManager InterfaceDescriptor = %s \n", __FILE__, __func__, __LINE__,name8Buffer);
+	}
+	else
+	{
+		LOGE("[%s:%s-%d] Binder handle not published alarmservice\n", __FILE__, __func__, __LINE__);
+	}
 
-	mNodeId = nodeId;
-	
-	printf("AlarmManager InterfaceDescriptor = %s\n",name8Buffer);
 }
 
 AlarmManager::~AlarmManager(void)
 {
-	printf("~AlarmManager in.\n");
-
-	printf("~AlarmManager out.\n");
+	LOGD("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 }
 
 
 int AlarmManager::setAlarm(time_t time)
 {
-	printf("setAlarm: %s in.\n", __func__);
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 	mIAlarmService->setAlarm(time, mNodeId);
-	printf("setAlarm: %s out.\n", __func__);
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 	return true;
 }
 int AlarmManager::setRepeatAlarm(time_t time,time_t interval)
 {
-	printf("setAlarm: %s in.\n", __func__);
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 	//mIAlarmService->setRepeatAlarm(true,time,time,interval,mNodeId);
-	printf("setAlarm: %s out.\n", __func__);
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 	return true;
 }
 
 
 int AlarmManager::cancelAlarm(time_t time)
 {
-	printf("setAlarm: %s in.\n", __func__);
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 	//mIAlarmService->cancelAlarm(time, mNodeId);
-	printf("setAlarm: %s out.\n", __func__);
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 	return true;
 }
 
@@ -122,23 +117,23 @@ int AlarmManager::cancelAlarm(time_t time)
 
 bool AlarmManager::registerAlarmCallback(alarmEventCb pAlarmEventCb)
 {
-	printf("registerAlarmCallback in.\n");
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 	mAlarmEventCallback = pAlarmEventCb;
 	
 	if(0 != mIAlarmService.get())
 	{
 		cb = new AlarmCallback(this);
-		printf("mIAlarmService->registerAlarmCallback .\n");
+		LOGD("[%s:%s-%d] mIAlarmService->registerAlarmCallback\n", __FILE__, __func__, __LINE__);
 		mIAlarmService->registerAlarmCallback(cb,mNodeId);
 	}
 	else
 	{
-		printf("Register callback fail, mIAlarmService is NULL.\n");
+		LOGE("[%s:%s-%d] Register callback fail, mIAlarmService is NULL\n", __FILE__, __func__, __LINE__);
 		return false;
 	}
 	
-	printf("registerAlarmCallback out.\n");
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 	return true;
 }

@@ -15,7 +15,7 @@ TARGET := libalarmmanager.so
 
 
 
-OBJDIR := $(PROJECT_DIR)/out/framework/managers/alarmmanagerr/obj
+OBJDIR := $(PROJECT_DIR)/out/framework/managers/alarmmanager/obj
 LIBDIR := $(PROJECT_DIR)/out/framework/managers/alarmmanager/lib
 #BINDIR := $(PROJECT_DIR)/out/framework/managers/alarmmanager/bin
 

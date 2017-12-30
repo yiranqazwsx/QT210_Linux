@@ -15,24 +15,23 @@ typedef int (* alarmEventCb)(unsigned int repeatFlag,time_t deadline);
 class AlarmManager
 {
 public:
-	sp<IAlarmService> mIAlarmService;
-	alarmEventCb	mAlarmEventCallback;
-	
 	static AlarmManager* getInstance(unsigned long nodeId);
-	AlarmManager(unsigned long nodeId);
 	~AlarmManager(void);
-	
 	int setAlarm(time_t time);
 	int setRepeatAlarm(time_t time,time_t interval);
 	int cancelAlarm(time_t time);
-	
 	bool registerAlarmCallback(alarmEventCb pAlarmEventCb);
+	alarmEventCb	mAlarmEventCallback;
 	//virtual void callback(void) = 0;
 	//void *pSon;
 protected:
-
+	
+	
 private:
-	static  AlarmManager *m_pInstance;
+	AlarmManager(unsigned long nodeId);
+	sp<IAlarmService> mIAlarmService;
+
+	static  AlarmManager *mpInstance;
 	sp<AlarmCallback> cb;
 	unsigned long mNodeId;
 };

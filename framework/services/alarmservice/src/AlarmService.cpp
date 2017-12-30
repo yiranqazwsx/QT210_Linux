@@ -21,14 +21,14 @@ AlarmService* AlarmService::mInstance = NULL;
 
 AlarmService* AlarmService::getInstance()
 {	
-	LOGD("getInstance: %s in.\n", __func__);
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 	if(NULL == mInstance)
 	{
 		mInstance = new AlarmService(ALARM_SERVICE_NAME,ALARM_SERVICE_NODE_ID);
 	}
 	
-	LOGD( "getInstance: %s out.\n", __func__);
+	LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 	return mInstance;
 }
@@ -64,22 +64,20 @@ AlarmService::AlarmService(char *svr_name,unsigned long node_id)
 
 	fd = open("/dev/alarm", O_RDWR);
 	if(fd < 0) {
-		LOGE("Unable to open alarm driver: %s\n", strerror(errno));
+		LOGE("[%s:%s-%d] open alarm drive fail \n", __FILE__, __func__, __LINE__);
 	}
 	else
 	{
-		LOGD("/dev/alarm open ok\n");
+		LOGD("[%s:%s-%d] open alarm drive ok\n", __FILE__, __func__, __LINE__);
 	}
-	
-	//g_thread_new ("AlarmServiceWaitThread",(GThreadFunc)alarmWaitNotifyThreadProc,(gpointer)this);
 	
 	ret = pthread_create(&tid, NULL, alarmWaitNotifyThreadProc, (void *)this); //创建线程  
     	if(ret != 0){
-		LOGE("pthread_create fail\n");
+		LOGE("[%s:%s-%d] pthread_create fail \n", __FILE__, __func__, __LINE__);
 	}
 	else
 	{
-		LOGD("pthread_create OK\n");
+		LOGD("[%s:%s-%d] pthread_create OK \n", __FILE__, __func__, __LINE__);
 	}
 
 }
@@ -112,7 +110,8 @@ int AlarmService::setAlarm(time_t deadline,unsigned long nodeId)
 	
 	// 3 check rtc list,if it is least,cancel last one,and set into kernel
 	//gboolean			bIsFind  = false; 
-	LOGD("AlarmService setAlarm in.\n");
+
+	LOGD("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 #if 0
 	if((0 == nodeId) || (0 == deadline))
 	{
@@ -137,7 +136,7 @@ int AlarmService::setAlarm(time_t deadline,unsigned long nodeId)
 	g_mutex_unlock(&mRtcAlarmTimemutex);	
 #endif
 	
-	LOGD("AlarmService setAlarm out.\n");
+	LOGD("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 	return 1;
 
 }
@@ -199,13 +198,13 @@ void* AlarmService::alarmWaitNotifyThreadProc(void *data)
 
 	while(1)
 	{
-		LOGD("alarmWaitNotifyThreadProc int.\n");
+		LOGD("[%s:%s-%d] alarmWaitNotifyThreadProc in \n", __FILE__, __func__, __LINE__);
 		sleep(5);
 		if(NULL != pAlarmService->mCallback.get())
 		{
 			pAlarmService->mCallback->AlarmNotifyCallback(0,123456789);
 		}
-		LOGD("alarmWaitNotifyThreadProc out.\n");
+		LOGD("[%s:%s-%d] alarmWaitNotifyThreadProc out \n", __FILE__, __func__, __LINE__);
 	}
 	return NULL;
 }

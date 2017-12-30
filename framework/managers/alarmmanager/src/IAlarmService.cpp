@@ -1,7 +1,11 @@
-#include <binder/Parcel.h>
 
+#define LOG_TAG "IAlarmService"
+#include <binder/Parcel.h>
 #include "IAlarmService.h"
 #include "IAlarmCallback.h"
+
+#include <cutils/log.h>
+
 
 using namespace android;
 
@@ -16,7 +20,7 @@ public:
 
 	virtual int setAlarm(time_t time,unsigned long nodeId)
 	{
-		printf("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 		Parcel data, reply;
 		//data.writeInterfaceToken(IMcuComManager::getInterfaceDescriptor());
@@ -26,14 +30,14 @@ public:
 		remote()->transact(ALARM_SET, data, &reply);
 		int res = reply.readInt32();  
 
-		printf("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 		return res;
 	}
 #if 0
 	virtual int setRepeatAlarm(unsigned int firstSetFlag,const time_t firstTime,time_t nextDeadline,time_t interval,unsigned long nodeId)
 	{
-		printf("%s in.\n", __func__);
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 		Parcel data, reply;
 		//data.writeInterfaceToken(IMcuComManager::getInterfaceDescriptor());
@@ -46,14 +50,14 @@ public:
 		remote()->transact(ALARM_SET_REPEAT, data, &reply);
 		int res = reply.readInt32();  
 
-		printf("%s out.res = %d\n", __func__,res);
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 		return res;
 	}
 
 	virtual int cancelAlarm(time_t time,unsigned long nodeId)
 	{
-		printf("%s in.\n", __func__);
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 		Parcel data, reply;
        	//data.writeInterfaceToken(IMcuComManager::getInterfaceDescriptor());
@@ -63,7 +67,7 @@ public:
        	remote()->transact(ALARM_CANCEL, data, &reply);
 		int res = reply.readInt32();
 
-		printf("%s out.res = %d\n", __func__,res);
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 		return res;
 	}
@@ -73,7 +77,7 @@ public:
 	virtual int registerAlarmCallback(const sp<IAlarmCallback>& callback,unsigned long nodeId)
 	{
 
-		printf("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 
 		Parcel data, reply;
 		//data.writeStrongBinder(IInterface::asBinder(callback));
@@ -82,7 +86,7 @@ public:
 		remote()->transact(ALARM_REGISTER_CALLBACK, data, &reply);
 		int res = reply.readInt32();
 		
-		printf("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
+		LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 		return 0;
 	}
 
@@ -92,7 +96,7 @@ IMPLEMENT_META_INTERFACE(AlarmService, "Desay.IAlarmService");
 
 status_t BnAlarmService::onTransact(uint32_t code, const Parcel& data, Parcel* reply, uint32_t flags)
 {
-	printf("[%s:%s-%d] code = \n", __FILE__, __func__, __LINE__,code);
+	LOGV("[%s:%s-%d] code = \n", __FILE__, __func__, __LINE__,code);
 	
 	switch(code){
 		
@@ -101,11 +105,11 @@ status_t BnAlarmService::onTransact(uint32_t code, const Parcel& data, Parcel* r
 		{
 			//CHECK_INTERFACE(IMcuComManager, data, reply);
 			
-			//printf("%s in.clientName = %s\n", __func__,clientName);
+			//LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 			
 			time_t time = data.readInt64();
 			unsigned long nodeId = data.readInt64();
-			//printf("%s in.time = %lld\n", __func__,time);
+			//LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 			int res = setAlarm(time,nodeId);
 			reply->writeInt32(res);
 			
@@ -120,7 +124,7 @@ status_t BnAlarmService::onTransact(uint32_t code, const Parcel& data, Parcel* r
 
 			//CHECK_INTERFACE(IMcuComManager, data, reply);
 			//const char *clientName = data.readCString();
-			//printf("%s in.clientName = %s\n", __func__,clientName);
+			//LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 			unsigned int firstSetFlag = data.readInt32();
 			time_t firstTime = data.readInt64();
 			time_t nextDeadline = data.readInt64();
@@ -136,7 +140,7 @@ status_t BnAlarmService::onTransact(uint32_t code, const Parcel& data, Parcel* r
 		{
 			//CHECK_INTERFACE(IMcuComManager, data, reply);
 			//const char *clientName = data.readCString();
-			//printf("%s in.clientName = %s\n", __func__,clientName);
+			//LOGV("[%s:%s-%d]\n", __FILE__, __func__, __LINE__);
 			time_t time = data.readInt64();
 			unsigned long nodeId = data.readInt64();
 			int res = cancelAlarm(time,nodeId);
@@ -149,13 +153,11 @@ status_t BnAlarmService::onTransact(uint32_t code, const Parcel& data, Parcel* r
 		case ALARM_REGISTER_CALLBACK:
 		{
 			int res= 0 ;
-#if 1
 			//const char *clientName = data.readCString();
 			sp<IAlarmCallback> callback = interface_cast<IAlarmCallback>(data.readStrongBinder());
 			unsigned long nodeId = data.readInt64();
 			res = registerAlarmCallback(callback,nodeId);
 			reply->writeInt32(res);
-#endif
 			return res;
 		}
 		break;

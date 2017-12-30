@@ -3,8 +3,8 @@
 #include <binder/ProcessState.h>
 #include "AlarmService.h"
 
-#define LOG_TAG_ALARM_MAIN "AlarmService"
-#include <cutils/log.h>
+//#define LOG_TAG_ALARM_MAIN "AlarmService"
+//#include <cutils/log.h>
 
 using namespace android;
 
