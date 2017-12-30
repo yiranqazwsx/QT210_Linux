@@ -5,6 +5,11 @@
 namespace android {
 
 
+
+#define MSG_TYPE1 1
+#define MSG_TYPE2 2
+
+
 TestAHandle::TestAHandle()
 {
 	
@@ -20,13 +25,18 @@ void TestAHandle::onMessageReceived(const sp<AMessage> &msg)
 {
 	switch (msg->what())
 	{
-		case 123:
+		case MSG_TYPE1:
 		{
-			//LOGD("onMessageReceived SIGNAL_1");
-			printf("onMessageReceived 123 \r\n");
+			AString *aString = new AString();
+			msg->findString("mylooper_msg1",aString);
+			printf("onMessageReceived msg1 : %s\r\n",aString->c_str());
 			break;
 		}
-
+		case MSG_TYPE2:
+		{
+			printf("onMessageReceived msg2 \r\n");
+			break;
+		}
 		default:
 		break;
 
