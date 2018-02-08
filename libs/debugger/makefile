@@ -10,14 +10,12 @@ AR	                := $(COMPILER_DIR)/$(COMPILER_PREFIX)ar
 LD               	:= $(COMPILER_DIR)/$(COMPILER_PREFIX)ld
 
 
-TARGET := libutils.so
-
-SRCDIR := ./
+TARGET := libdebugger.so
 
 
-OBJDIR := $(PROJECT_DIR)/out/libs/libutils/obj
-LIBDIR := $(PROJECT_DIR)/out/libs/libutils/lib
-#BINDIR := $(PROJECT_DIR)/out/libs/libutils/bin
+OBJDIR := $(PROJECT_DIR)/out/libs/debugger/obj
+LIBDIR := $(PROJECT_DIR)/out/libs/debugger/lib
+
 
 
 CFLAGS  :=  -fPIC
@@ -25,37 +23,22 @@ CFLAGS  += -DHAVE_PTHREADS
 CFLAGS  += -DHAVE_SYS_UIO_H
 CFLAGS  += -DHAVE_ENDIAN_H
 CFLAGS  += -DHAVE_ANDROID_OS=1
-CFLAGS  += -DHAVE_PRCTL
-CFLAGS  += -DHAVE_SCHED_H
+CFLAGS  += -DHAVE_LINUX_LOCAL_SOCKET_NAMESPACE
 
 
 LIBS := \
-	-lcutils \
-	-lrt \
-	-ldl \
-	-lpthread \
-	
+
 LIBDIRS := \
 
+
 INCPATHS := \
-	-I ../include \
+	-I ./inc \
+	-I ../../../libs/include/ \
+
+SRCDIR := ./src
 
 SOURCES := \
-    RefBase.cpp \
-    String8.cpp \
-    String16.cpp \
-    StringArray.cpp \
-    VectorImpl.cpp \
-    Threads.cpp \
-    Unicode.cpp \
-    Static.cpp \
-    BufferedTextOutput.cpp \
-    TextOutput.cpp \
-    Timers.cpp \
-    SharedBuffer.cpp \
-    Debug.cpp \
-    SystemClock.cpp \
-    CallStack.cpp \
+	debugger.cpp
 
 OBJECTS := $(addprefix $(OBJDIR)/, $(SOURCES:.cpp=.o))
 
